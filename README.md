@@ -10,4 +10,4 @@ yaptığım çalışmalar ve ödevleri içermektedir yada belirtmektedir.
 - Pseudocode
 - Big-O
 - Veri Yapıları
-- Mobil Uygulama Geliştirme
+- Mobil Uygulama GeliştirmeMekatronik mühendisiyim ve bir süredir otomasyon alanında çalışıyorum ancak kariyerimi yazılım tarafına kaydırmak istiyorum. Özellikle C#, JavaScript ve mobil uygulama geliştirme alanlarında kendimi geliştirmek istiyorum. Bir teknolojiyi sadece kullanmakla kalmayp, arkasındaki mantığını ve nasıl çalışmakta olduğunu mümkün olduğunca membağından öğrenmek istiyorum. Hedefim zamanla sağlam projeler geliştirebilen, gerçek anlamda işin içinde olan, neyi neden yaptığını bilen, ne zaman yapması gerektiğini bilen ve farklı alanlarda kendi başına çözüm üretebilen, takım içinde güçlü bir rol üstlenen, görev ve sorumluluklarını eksiksiz yerine getiren iyi ve alanında yetkin bir yazılımcı olmak.
