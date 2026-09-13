@@ -1,4 +1,4 @@
-"Bu bir kitap özeti çıkaran AI destekli motordur."
+"Bu uygulama AI destekli bir kitap özeti çıkarır."
 "Kitabı yükle."
 "Ne olacağını gör."
 "Seçim senin."
