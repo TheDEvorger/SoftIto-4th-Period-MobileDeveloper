@@ -1,0 +1,6 @@
+"Bu bir kitap özeti çıkaran AI destekli motordur."
+"Kitabı yükle."
+"Ne olacağını gör."
+"Seçim senin."
+"Mavi Hapmı Kırmızı Hapmı"
+"Ben olsam ikisinide seçmem."
