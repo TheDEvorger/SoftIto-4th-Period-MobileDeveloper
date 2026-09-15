@@ -18,41 +18,123 @@ class DijitalUrun extends Urun {
 
   @override
   double kargoUcretiHesapla() {
-    throw Exception("Dijital urunlerde kargo hesaplanamaz!");
+    return 0.0;
   }
 }
 
-abstract class ISiparisIslemleri {
+
+
+abstract class SiparisKayitIslemi {
   void siparisKaydet(String orderId, double tutar);
-  void odemeYap(String tip, double tutar);
+}
+
+abstract class OdemeIslemi {
+  void odemeYap(OdemeYontemi odemeYontemi, double tutar);
+}
+
+abstract class KargoIslemi {
   void kargoGonder(String orderId, String adres);
+}
+
+abstract class MailIslemi {
   void mailGonder(String email, String mesaj);
+}
+
+abstract class SmsIslemi {
   void smsGonder(String tel, String mesaj);
+}
+
+abstract class FaturaIslemi {
   void faturaYazdir(String orderId);
 }
 
-class SqliteVeritabani {
-  void kaydet(String sql) {
-    print("DB calistirildi: " + sql);
-  }
+
+
+
+abstract class MailServisi {
+  void mailAt(String to, String body);
 }
 
-class SmtpMailServisi {
+class SmtpMailServisi implements MailServisi {
+  @override
   void mailAt(String to, String body) {
     print("SMTP Mail gonderildi: " + to);
   }
 }
 
-class NetgsmSmsServisi {
+abstract class SmsServisi {
+  void smsYolla(String gsm, String text);
+}
+
+class NetgsmSmsServisi implements SmsServisi {
+  @override
   void smsYolla(String gsm, String text) {
     print("SMS iletildi: " + gsm);
   }
 }
 
-class SiparisYoneticisi implements ISiparisIslemleri {
-  SqliteVeritabani db = SqliteVeritabani();
-  SmtpMailServisi mailci = SmtpMailServisi();
-  NetgsmSmsServisi smsci = NetgsmSmsServisi();
+
+
+
+
+
+abstract class OdemeYontemi {
+  void ode(double tutar);
+}
+
+class KrediKartiOdeme implements OdemeYontemi {
+  @override
+  void ode(double tutar) {
+    print("$tutar TL Kredi kartindan POS ile cekildi.");
+  }
+}
+
+abstract class Veritabani {
+  void kaydet(String sql);
+}
+
+class SqliteVeritabani implements Veritabani {
+  @override
+  void kaydet(String sql) {
+    print("DB calistirildi: " + sql);
+  }
+}
+
+
+
+abstract class Indirim {
+  double uygula(double toplam);
+}
+
+
+class Indirim10 implements Indirim {
+  @override
+  double uygula(double toplam) {
+    return toplam * 0.90;
+  }
+}
+
+class Yaz20 implements Indirim {
+  @override
+  double uygula(double toplam) {
+    return toplam * 0.80;
+  }
+}
+
+class Sepette50 implements Indirim {
+  @override
+  double uygula(double toplam) {
+    return toplam - 50;
+  }
+}
+
+
+class SiparisYoneticisi implements SiparisKayitIslemi,OdemeIslemi,KargoIslemi,MailIslemi,SmsIslemi,FaturaIslemi {
+  final Veritabani db;
+  final MailServisi mailci;
+  final SmsServisi smsci;
+
+  SiparisYoneticisi(this.db, this.mailci, this.smsci);
 
   @override
   void siparisKaydet(String orderId, double tutar) {
@@ -60,18 +142,8 @@ class SiparisYoneticisi implements ISiparisIslemleri {
   }
 
   @override
-  void odemeYap(String tip, double tutar) {
-    if (tip == "KREDI_KARTI") {
-      print("$tutar TL Kredi kartindan POS ile cekildi.");
-    } else if (tip == "HAVALE") {
-      print("$tutar TL Havale kontrol edildi.");
-    } else if (tip == "KAPIDA_ODEME") {
-      print("$tutar TL Kapida odeme tahsil edilecek (Komisyon +15 TL).");
-    } else if (tip == "CRYPTO") {
-      print("$tutar TL USDT transferi onaylandi.");
-    } else {
-      print("Gecersiz odeme yontemi");
-    }
+  void odemeYap(OdemeYontemi odemeYontemi, double tutar) {
+    odemeYontemi.ode(tutar);
   }
 
   @override
@@ -97,12 +169,12 @@ class SiparisYoneticisi implements ISiparisIslemleri {
   void siparisTamamla(
       String orderId,
       List<Urun> sepet,
-      String odemeTipi,
+      OdemeYontemi odemeYontemi,
       String musteriAdi,
       String email,
       String tel,
       String adres,
-      String kuponKodu) {
+      Indirim indirim) {
     
     double toplam = 0;
 
@@ -116,18 +188,12 @@ class SiparisYoneticisi implements ISiparisIslemleri {
       sepet[i].stok--;
     }
 
-    if (kuponKodu == "INDIRIM10") {
-      toplam = toplam * 0.90;
-    } else if (kuponKodu == "YAZ20") {
-      toplam = toplam * 0.80;
-    } else if (kuponKodu == "SEPETTE50") {
-      toplam = toplam - 50;
-    }
+    toplam = indirim.uygula(toplam);
 
     double kdv = toplam * 0.20;
     double sonTutar = toplam + kdv;
 
-    odemeYap(odemeTipi, sonTutar);
+    odemeYap(odemeYontemi, sonTutar);
     siparisKaydet(orderId, sonTutar);
     faturaYazdir(orderId);
     mailGonder(email, "Sayin $musteriAdi, siparisiniz alindi. Tutar: $sonTutar TL");
@@ -137,7 +203,11 @@ class SiparisYoneticisi implements ISiparisIslemleri {
 }
 
 void main() {
-  var siparisci = SiparisYoneticisi();
+  var siparisci = SiparisYoneticisi(
+    SqliteVeritabani(),
+    SmtpMailServisi(),
+    NetgsmSmsServisi(),
+  );
 
   var urun1 = Urun("1", "Kablosuz Mouse", 450.0, 5, "FIZIKSEL");
   var urun2 = DijitalUrun("2", "Flutter Kursu E-Kitap", 150.0, 100);
@@ -147,11 +217,11 @@ void main() {
   siparisci.siparisTamamla(
     "SP-9921",
     sepet,
-    "KREDI_KARTI",
+    KrediKartiOdeme(),
     "Selahaddin",
     "selahaddin@kodvance.com",
     "05551112233",
     "Kadikoy / Istanbul",
-    "INDIRIM10",
+    Indirim10(),
   );
 }
