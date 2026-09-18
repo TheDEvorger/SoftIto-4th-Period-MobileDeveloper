@@ -1,0 +1,111 @@
+<body>
+
+    <h2>A̤ɐ͜ɨǣ́ꞎ͡ƣ Güvenli Mana Aktarımı</h2>
+
+    <p style="font-size: 12px; color: #cba5e1; margin-bottom: 16px;">
+        <strong>Aktarılacak Mana: 1.250 Æ</strong>
+    </p>
+
+    <form action="/mana-aktarimi" method="POST"
+        oninput="outTaksit.value=calcMonthly(rngTaksit.value)">
+
+        <div class="form-group">
+            <label for="aName">Mühür Sahibi:</label>
+
+            <input
+                type="text"
+                id="aName"
+                name="arcana_name"
+                required
+                placeholder="A̤ɐ͜ɨǣ́ꞎ͡ƣ sahibinin adı"
+                autocapitalize="characters">
+        </div>
+
+        <div class="form-group">
+            <label for="aNum">A̤ɐ͜ɨǣ́ꞎ͡ƣ Mühür Numarası:</label>
+
+            <input
+                type="text"
+                id="aNum"
+                name="arcana_num"
+                required
+                inputmode="numeric"
+                maxlength="19"
+                placeholder="0000 0000 0000 0000">
+        </div>
+
+        <div class="row">
+
+            <div class="col form-group">
+                <label for="aExp">Mühür Geçerlilik Tarihi (AA/YY):</label>
+
+                <input
+                    type="text"
+                    name="arcana_exp"
+                    id="aExp"
+                    required
+                    inputmode="numeric"
+                    maxlength="5"
+                    placeholder="12/24">
+            </div>
+
+            <div class="col form-group">
+                <label for="runeCode">Gizli Rün Kodu:</label>
+
+                <input
+                    type="password"
+                    name="rune_code"
+                    id="runeCode"
+                    required
+                    inputmode="numeric"
+                    maxlength="3"
+                    placeholder="***">
+            </div>
+
+        </div>
+
+        <div class="form-group slider-box">
+
+            <div style="display: flex;
+                        justify-content: space-between;
+                        font-size: 12px;
+                        font-weight: bold;
+                        margin-top: 12px;">
+
+                <span>
+                    Aktarım Döngüsü:
+                    <span id="lblDongu">1 Döngü</span>
+                </span>
+
+                <output name="outDongu" id="outDongu">
+                    1 x 1.250 Æ
+                </output>
+
+            </div>
+
+            <input
+                type="range"
+                id="rngDongu"
+                min="1"
+                max="6"
+                value="1"
+                oninput="document.getElementById('lblDongu').innerText=this.value+' Döngü'">
+
+        </div>
+
+        <p style="font-size: 12px; margin-bottom: 14px;">
+
+            <a href="javascript:void(0)"
+            onclick="document.getElementById('modalMuhur').showModal()">
+                A̤ɐ͜ɨǣ́ꞎ͡ƣ Aktarım Mührü Sözleşmesi
+            </a>'ni okudum
+
+        </p>
+
+        <button type="submit">
+            Mana Aktarımını Başlat
+        </button>
+
+    </form>
+
+</body>
