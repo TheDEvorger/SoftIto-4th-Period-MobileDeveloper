@@ -155,9 +155,7 @@ VALUES
 ('ELM302', 'Birleşik Element Uygulamaları', 5, 3),
 
 
--- ---------------------------------------------------------
 -- SAHA ARCANA VE KEŞİF
--- ---------------------------------------------------------
 
 ('FLD101', 'Arcana Saha Güvenliği', 3, 4),
 ('FLD102', 'Harita ve Rota Okuma', 3, 4),
@@ -167,9 +165,7 @@ VALUES
 ('FLD302', 'Kriz ve Tahliye Yönetimi', 4, 4),
 
 
--- ---------------------------------------------------------
 -- BÜYÜLÜ CANLILAR VE EKOSİSTEMLER
--- ---------------------------------------------------------
 
 ('BIO101', 'Büyülü Varlıklara Giriş', 4, 5),
 ('BIO102', 'Fantastik Flora Bilgisi', 3, 5),
@@ -179,9 +175,7 @@ VALUES
 ('BIO302', 'Ekosistem Koruma Teknikleri', 4, 5),
 
 
--- ---------------------------------------------------------
--- KADİM DİLLER, TARİH VE METİNLER
--- ---------------------------------------------------------
+-- ANTİK DİLLER, TARİH VE METİNLER
 
 ('HIS101', 'Arcana Tarihine Giriş', 3, 6),
 ('HIS102', 'Antik Uygarlıklar', 4, 6),
